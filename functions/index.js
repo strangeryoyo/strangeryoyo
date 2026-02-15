@@ -39,6 +39,12 @@ export const api = onRequest(
         return;
       }
       await handleLeaderboardSubmit(req, res);
+    } else if (path === "leaderboard/rename") {
+      if (req.method !== "POST") {
+        res.status(405).json({ error: "Method not allowed" });
+        return;
+      }
+      await handleLeaderboardRename(req, res);
     } else if (path === "leaderboard/all") {
       if (req.method !== "GET") {
         res.status(405).json({ error: "Method not allowed" });
@@ -228,5 +234,41 @@ async function handleGenerateQuote(req, res) {
       error: "Failed to generate quote",
       message: error.message
     });
+  }
+}
+
+async function handleLeaderboardRename(req, res) {
+  try {
+    const { oldName, newName } = req.body;
+
+    if (!oldName || !newName) {
+      res.status(400).json({ error: "Missing oldName or newName" });
+      return;
+    }
+
+    if (typeof newName !== 'string' || newName.trim().length === 0 || newName.trim().length > 20) {
+      res.status(400).json({ error: "newName must be 1-20 characters" });
+      return;
+    }
+
+    let totalUpdated = 0;
+
+    await Promise.all(VALID_GAMES.map(async (game) => {
+      const snapshot = await db
+        .collection('leaderboard').doc(game).collection('scores')
+        .where('playerName', '==', oldName.trim())
+        .get();
+
+      const updates = snapshot.docs.map(doc =>
+        doc.ref.update({ playerName: newName.trim() })
+      );
+      await Promise.all(updates);
+      totalUpdated += updates.length;
+    }));
+
+    res.json({ success: true, updated: totalUpdated });
+  } catch (error) {
+    console.error("Error renaming player:", error);
+    res.status(500).json({ error: "Failed to rename", message: error.message });
   }
 }

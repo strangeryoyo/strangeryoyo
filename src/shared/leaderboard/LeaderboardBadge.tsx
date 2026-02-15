@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { LeaderboardEntry, fetchLeaderboard, getPlayerName, setPlayerName } from './api';
+import { LeaderboardEntry, fetchLeaderboard, getPlayerName, setPlayerName, renamePlayer } from './api';
 import { NamePromptModal } from './NamePromptModal';
 
 interface LeaderboardBadgeProps {
@@ -90,7 +90,17 @@ export const LeaderboardBadge: React.FC<LeaderboardBadgeProps> = ({ gameName, fo
       )}
       {showNameEdit && (
         <NamePromptModal
-          onSubmit={(name) => { setPlayerName(name); setShowNameEdit(false); }}
+          onSubmit={async (name) => {
+            const oldName = getPlayerName();
+            setPlayerName(name);
+            setShowNameEdit(false);
+            if (oldName) {
+              await renamePlayer(oldName, name);
+              const since = mode === 'week' ? getWeekStart() : undefined;
+              const data = await fetchLeaderboard(gameName, since);
+              setEntries(data.slice(0, 3));
+            }
+          }}
           onSkip={() => setShowNameEdit(false)}
         />
       )}

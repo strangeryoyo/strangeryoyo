@@ -58,6 +58,20 @@ export async function fetchAllChampions(): Promise<Record<string, LeaderboardEnt
   }
 }
 
+export async function renamePlayer(oldName: string, newName: string): Promise<boolean> {
+  try {
+    const res = await fetch(`${API_BASE}/rename`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ oldName, newName }),
+    });
+    const data = await res.json();
+    return data.success;
+  } catch {
+    return false;
+  }
+}
+
 const PLAYER_NAME_KEY = 'leaderboardPlayerName';
 
 export function getPlayerName(): string | null {
