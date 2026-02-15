@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pigs Are Never Extinct</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect fill='%23FFC0CB' x='2' y='4' width='12' height='10' rx='2'/><rect fill='%23FFB6C1' x='5' y='7' width='6' height='5' rx='1'/><circle fill='%23FF69B4' cx='6' cy='9' r='1'/><circle fill='%23FF69B4' cx='10' cy='9' r='1'/><rect fill='%23FFC0CB' x='3' y='2' width='3' height='4'/><rect fill='%23FFC0CB' x='10' y='2' width='3' height='4'/></svg>">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'VT323', monospace;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #87CEEB;
+        background-image:
+          linear-gradient(to bottom, #87CEEB 0%, #87CEEB 60%, transparent 60%),
+          repeating-linear-gradient(
+            to right,
+            #8B5A2B 0px, #8B5A2B 64px,
+            #7A4A1B 64px, #7A4A1B 128px
+          );
+        background-size: 100% 100%, 128px 100%;
+        image-rendering: pixelated;
+        overflow: hidden;
+      }
+
+      /* Grass/dirt ground */
+      .ground {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 40%;
+        background:
+          repeating-linear-gradient(
+            to right,
+            #5D8C3E 0px, #5D8C3E 32px,
+            #4A7A2E 32px, #4A7A2E 64px
+          ),
+          linear-gradient(to bottom, #5D8C3E 0%, #5D8C3E 20%, #8B5A2B 20%, #8B5A2B 100%);
+        background-size: 64px 100%, 100% 100%;
+        image-rendering: pixelated;
+      }
+
+      .ground::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 24px;
+        background: repeating-linear-gradient(
+          to right,
+          #6B9F4A 0px, #6B9F4A 32px,
+          #5D8C3E 32px, #5D8C3E 64px
+        );
+        background-size: 64px 100%;
+      }
+
+      .content {
+        position: relative;
+        z-index: 10;
+        text-align: center;
+        margin-bottom: 100px;
+      }
+
+      .title {
+        font-size: 72px;
+        color: #3F3F3F;
+        text-shadow:
+          4px 4px 0px #000,
+          -2px -2px 0px #7A7A7A;
+        letter-spacing: 4px;
+        margin-bottom: 8px;
+        animation: titleBob 2s ease-in-out infinite;
+      }
+
+      .title span {
+        color: #5D8C3E;
+      }
+
+      .subtitle {
+        font-size: 28px;
+        color: #FFFF00;
+        text-shadow: 2px 2px 0px #000;
+        margin-bottom: 60px;
+      }
+
+      @keyframes titleBob {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-8px); }
+      }
+
+      .mc-button {
+        display: inline-block;
+        padding: 16px 48px;
+        font-family: 'VT323', monospace;
+        font-size: 32px;
+        color: #FFFFFF;
+        text-decoration: none;
+        text-shadow: 2px 2px 0px #3F3F3F;
+        background: linear-gradient(to bottom, #8B8B8B 0%, #8B8B8B 50%, #6B6B6B 50%, #6B6B6B 100%);
+        border: 4px solid #000;
+        border-top-color: #C6C6C6;
+        border-left-color: #C6C6C6;
+        border-bottom-color: #3F3F3F;
+        border-right-color: #3F3F3F;
+        image-rendering: pixelated;
+        cursor: pointer;
+        transition: all 0.1s;
+      }
+
+      .mc-button:hover {
+        background: linear-gradient(to bottom, #A5A5A5 0%, #A5A5A5 50%, #858585 50%, #858585 100%);
+        color: #FFFFA0;
+      }
+
+      .mc-button:active {
+        border-top-color: #3F3F3F;
+        border-left-color: #3F3F3F;
+        border-bottom-color: #C6C6C6;
+        border-right-color: #C6C6C6;
+        transform: translateY(2px);
+      }
+
+      /* Floating blocks decoration */
+      .block {
+        position: fixed;
+        width: 48px;
+        height: 48px;
+        image-rendering: pixelated;
+        animation: float 3s ease-in-out infinite;
+        z-index: 5;
+      }
+
+      .block-grass {
+        background: linear-gradient(to bottom, #5D8C3E 0%, #5D8C3E 25%, #8B5A2B 25%, #8B5A2B 100%);
+        border: 3px solid #000;
+      }
+
+      .block-stone {
+        background: linear-gradient(135deg, #9A9A9A 25%, #7A7A7A 25%, #7A7A7A 50%, #8A8A8A 50%, #8A8A8A 75%, #6A6A6A 75%);
+        border: 3px solid #000;
+      }
+
+      .block-1 { top: 15%; left: 10%; animation-delay: 0s; }
+      .block-2 { top: 25%; right: 12%; animation-delay: 0.5s; }
+      .block-3 { top: 10%; right: 25%; animation-delay: 1s; }
+      .block-4 { top: 30%; left: 20%; animation-delay: 1.5s; }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-15px) rotate(5deg); }
+      }
+
+      /* Pixelated clouds */
+      .cloud {
+        position: fixed;
+        background: #FFFFFF;
+        z-index: 1;
+        animation: cloudMove 30s linear infinite;
+      }
+
+      .cloud::before, .cloud::after {
+        content: '';
+        position: absolute;
+        background: #FFFFFF;
+      }
+
+      .cloud-1 {
+        width: 120px;
+        height: 40px;
+        top: 10%;
+        left: -150px;
+      }
+      .cloud-1::before {
+        width: 60px;
+        height: 30px;
+        top: -20px;
+        left: 20px;
+      }
+
+      .cloud-2 {
+        width: 100px;
+        height: 35px;
+        top: 20%;
+        left: -200px;
+        animation-delay: 10s;
+      }
+
+      @keyframes cloudMove {
+        from { transform: translateX(0); }
+        to { transform: translateX(calc(100vw + 200px)); }
+      }
+
+      .version {
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        font-size: 18px;
+        color: #FFF;
+        text-shadow: 1px 1px 0px #000;
+        z-index: 20;
+      }
+
+      /* Technoblade Pig with Crown */
+      .pig-container {
+        position: relative;
+        width: 120px;
+        height: 140px;
+        margin-bottom: 20px;
+        animation: pigBob 2s ease-in-out infinite;
+      }
+
+      @keyframes pigBob {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+      }
+
+      /* Crown */
+      .crown {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 70px;
+        height: 30px;
+        z-index: 3;
+      }
+      .crown-base {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 70px;
+        height: 16px;
+        background: #FFD700;
+        border: 3px solid #B8860B;
+      }
+      .crown-point {
+        position: absolute;
+        width: 14px;
+        height: 20px;
+        background: #FFD700;
+        border: 3px solid #B8860B;
+        border-bottom: none;
+      }
+      .crown-point-1 { left: 0; bottom: 13px; }
+      .crown-point-2 { left: 28px; bottom: 13px; }
+      .crown-point-3 { right: 0; bottom: 13px; }
+      .crown-gem {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: #FF0000;
+        border: 2px solid #8B0000;
+        bottom: 4px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+
+      /* Pig Head */
+      .pig-head {
+        position: absolute;
+        top: 28px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 100px;
+        background: #FFC0CB;
+        border: 4px solid #CC9999;
+        image-rendering: pixelated;
+      }
+
+      /* Pig Snout */
+      .pig-snout {
+        position: absolute;
+        top: 50px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 30px;
+        background: #FFB6C1;
+        border: 3px solid #CC9999;
+      }
+      .nostril {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: #FF69B4;
+        border: 2px solid #CC6699;
+        top: 8px;
+      }
+      .nostril-left { left: 8px; }
+      .nostril-right { right: 8px; }
+
+      /* Pig Eyes */
+      .pig-eye {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        background: #FFFFFF;
+        border: 2px solid #000;
+        top: 25px;
+      }
+      .pig-eye::after {
+        content: '';
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: #000;
+        top: 2px;
+        left: 4px;
+      }
+      .eye-left { left: 18px; }
+      .eye-right { right: 18px; }
+
+      /* Pig Ears */
+      .pig-ear {
+        position: absolute;
+        width: 24px;
+        height: 28px;
+        background: #FFC0CB;
+        border: 3px solid #CC9999;
+        top: 5px;
+      }
+      .ear-left { left: -8px; transform: rotate(-15deg); }
+      .ear-right { right: -8px; transform: rotate(15deg); }
+    </style>
+  </head>
+  <body>
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+
+    <div class="block block-grass block-1"></div>
+    <div class="block block-stone block-2"></div>
+    <div class="block block-grass block-3"></div>
+    <div class="block block-stone block-4"></div>
+
+    <div class="content">
+      <!-- Technoblade Pig with Crown -->
+      <div class="pig-container">
+        <div class="crown">
+          <div class="crown-point crown-point-1"></div>
+          <div class="crown-point crown-point-2"></div>
+          <div class="crown-point crown-point-3"></div>
+          <div class="crown-base"></div>
+          <div class="crown-gem"></div>
+        </div>
+        <div class="pig-head">
+          <div class="pig-ear ear-left"></div>
+          <div class="pig-ear ear-right"></div>
+          <div class="pig-eye eye-left"></div>
+          <div class="pig-eye eye-right"></div>
+          <div class="pig-snout">
+            <div class="nostril nostril-left"></div>
+            <div class="nostril nostril-right"></div>
+          </div>
+        </div>
+      </div>
+      <h1 class="title">PIGS ARE <span>NEVER</span> EXTINCT</h1>
+      <p class="subtitle">Play. Learn. Protect.</p>
+      <a href="/home.html" class="mc-button">▶ PLAY</a>
+    </div>
+
+    <div class="ground"></div>
+    <div class="version">v1.0.0</div>
+  </body>
+</html>

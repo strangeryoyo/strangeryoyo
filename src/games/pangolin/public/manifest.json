@@ -1,0 +1,9 @@
+{
+  "name": "Sunda Roll: Pangolin Protector",
+  "short_name": "Pangolin",
+  "start_url": ".",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#1c1917",
+  "theme_color": "#1c1917"
+}

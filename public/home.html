@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pigs Are Never Extinct</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect fill='%23FFC0CB' x='2' y='4' width='12' height='10' rx='2'/><rect fill='%23FFB6C1' x='5' y='7' width='6' height='5' rx='1'/><circle fill='%23FF69B4' cx='6' cy='9' r='1'/><circle fill='%23FF69B4' cx='10' cy='9' r='1'/><rect fill='%23FFC0CB' x='3' y='2' width='3' height='4'/><rect fill='%23FFC0CB' x='10' y='2' width='3' height='4'/></svg>">
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: 'VT323', monospace;
+        min-height: 100vh;
+        background-color: #2C2C2C;
+        background-image:
+          repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 32px,
+            rgba(0,0,0,0.1) 32px,
+            rgba(0,0,0,0.1) 64px
+          ),
+          repeating-linear-gradient(
+            90deg,
+            #3A3A3A 0px,
+            #3A3A3A 32px,
+            #2E2E2E 32px,
+            #2E2E2E 64px
+          );
+        background-size: 64px 64px;
+        image-rendering: pixelated;
+        padding: 20px;
+        color: #FFFFFF;
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+      }
+
+      /* Inventory panel */
+      .inventory-panel {
+        background: #C6C6C6;
+        border: 4px solid #000;
+        border-top-color: #FFFFFF;
+        border-left-color: #FFFFFF;
+        border-bottom-color: #555555;
+        border-right-color: #555555;
+        padding: 12px;
+        margin-bottom: 20px;
+      }
+
+      .panel-title {
+        font-size: 28px;
+        color: #404040;
+        text-shadow: 1px 1px 0px #FFFFFF;
+        margin-bottom: 12px;
+        padding-left: 4px;
+      }
+
+      .inventory-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 4px;
+        background: #8B8B8B;
+        padding: 4px;
+        border: 2px solid #000;
+        border-top-color: #373737;
+        border-left-color: #373737;
+        border-bottom-color: #FFFFFF;
+        border-right-color: #FFFFFF;
+      }
+
+      .inventory-slot {
+        aspect-ratio: 1;
+        background: #8B8B8B;
+        border: 2px solid #000;
+        border-top-color: #373737;
+        border-left-color: #373737;
+        border-bottom-color: #FFFFFF;
+        border-right-color: #FFFFFF;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: #FFFFFF;
+        font-size: 14px;
+        text-align: center;
+        padding: 8px;
+        transition: all 0.1s;
+        position: relative;
+      }
+
+      .inventory-slot:hover {
+        background: #A0A0A0;
+        border-color: #FFFF00;
+        transform: scale(1.05);
+        z-index: 10;
+      }
+
+      .inventory-slot:hover .slot-label {
+        color: #FFFF55;
+      }
+
+      .slot-icon {
+        font-size: 36px;
+        margin-bottom: 4px;
+        filter: drop-shadow(2px 2px 0px rgba(0,0,0,0.5));
+      }
+
+      .slot-label {
+        font-size: 13px;
+        text-shadow: 1px 1px 0px #000;
+        line-height: 1.2;
+      }
+
+      /* Featured section with larger slots */
+      .featured-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 4px;
+        background: #8B8B8B;
+        padding: 4px;
+        border: 2px solid #000;
+        border-top-color: #373737;
+        border-left-color: #373737;
+        border-bottom-color: #FFFFFF;
+        border-right-color: #FFFFFF;
+      }
+
+      .featured-slot {
+        aspect-ratio: 1;
+        background: linear-gradient(135deg, #8B8B8B 0%, #7A7A7A 100%);
+        border: 2px solid #000;
+        border-top-color: #373737;
+        border-left-color: #373737;
+        border-bottom-color: #FFFFFF;
+        border-right-color: #FFFFFF;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        color: #FFFFFF;
+        padding: 12px;
+        transition: all 0.1s;
+        position: relative;
+      }
+
+      .featured-slot:hover {
+        background: linear-gradient(135deg, #5D8C3E 0%, #4A7A2E 100%);
+        border-color: #FFFF00;
+        transform: scale(1.03);
+        z-index: 10;
+      }
+
+      .featured-slot .slot-icon {
+        font-size: 48px;
+      }
+
+      .featured-slot .slot-label {
+        font-size: 16px;
+      }
+
+      /* Hotbar at bottom */
+      .hotbar {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #C6C6C6;
+        border: 4px solid #000;
+        border-top-color: #FFFFFF;
+        border-left-color: #FFFFFF;
+        border-bottom-color: #555555;
+        border-right-color: #555555;
+        padding: 4px;
+        display: flex;
+        gap: 4px;
+        z-index: 100;
+      }
+
+      .hotbar-slot {
+        width: 50px;
+        height: 50px;
+        background: #8B8B8B;
+        border: 2px solid #000;
+        border-top-color: #373737;
+        border-left-color: #373737;
+        border-bottom-color: #FFFFFF;
+        border-right-color: #FFFFFF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        font-size: 28px;
+        transition: all 0.1s;
+      }
+
+      .hotbar-slot:hover {
+        background: #A0A0A0;
+        border-color: #FFFF00;
+        transform: translateY(-4px);
+      }
+
+      .hotbar-slot.active {
+        border-color: #FFFFFF;
+        border-width: 3px;
+      }
+
+      /* Header */
+      .header {
+        text-align: center;
+        margin-bottom: 24px;
+      }
+
+      .header h1 {
+        font-size: 48px;
+        color: #FFFFFF;
+        text-shadow:
+          3px 3px 0px #000,
+          -1px -1px 0px #5D8C3E;
+        letter-spacing: 2px;
+      }
+
+      .header h1 span {
+        color: #5D8C3E;
+      }
+
+      .header p {
+        font-size: 20px;
+        color: #AAAAAA;
+        text-shadow: 1px 1px 0px #000;
+      }
+
+      /* Rarity colors */
+      .rare {
+        background: linear-gradient(135deg, #8B8B8B 0%, #5555FF 100%) !important;
+      }
+      .rare:hover {
+        background: linear-gradient(135deg, #6666FF 0%, #4444DD 100%) !important;
+      }
+
+      .epic {
+        background: linear-gradient(135deg, #8B8B8B 0%, #AA00AA 100%) !important;
+      }
+      .epic:hover {
+        background: linear-gradient(135deg, #CC44CC 0%, #992299 100%) !important;
+      }
+
+      .legendary {
+        background: linear-gradient(135deg, #8B8B8B 0%, #FFAA00 100%) !important;
+      }
+      .legendary:hover {
+        background: linear-gradient(135deg, #FFCC44 0%, #DD9900 100%) !important;
+      }
+
+      /* Count badge */
+      .count-badge {
+        position: absolute;
+        bottom: 4px;
+        right: 6px;
+        font-size: 16px;
+        color: #FFFFFF;
+        text-shadow: 1px 1px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000;
+      }
+
+      /* Spacer for hotbar */
+      .spacer {
+        height: 80px;
+      }
+
+      /* Tooltip */
+      .inventory-slot::after,
+      .featured-slot::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 105%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #1A0A30;
+        border: 2px solid #280A46;
+        padding: 6px 10px;
+        font-size: 14px;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s;
+        z-index: 100;
+      }
+
+      .inventory-slot:hover::after,
+      .featured-slot:hover::after {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>PIGS ARE <span>NEVER</span> EXTINCT</h1>
+        <p>Your Inventory</p>
+      </div>
+
+      <!-- Mini-Games -->
+      <div class="inventory-panel">
+        <div class="panel-title">🎮 Mini-Games</div>
+        <div class="inventory-grid">
+          <a href="/adventure1.html" class="inventory-slot epic" data-tooltip="AI-Powered Story">
+            <span class="slot-icon">🏰</span>
+            <span class="slot-label">Dark Castle</span>
+          </a>
+          <a href="/endangered.html" class="inventory-slot legendary" data-tooltip="16 Animal Games!">
+            <span class="slot-icon">🐷</span>
+            <span class="slot-label">Animals</span>
+          </a>
+          <a href="/guess.html" class="inventory-slot" data-tooltip="Guess the Word">
+            <span class="slot-icon">❓</span>
+            <span class="slot-label">Guessing</span>
+          </a>
+          <a href="/guess_number.html" class="inventory-slot" data-tooltip="Higher or Lower">
+            <span class="slot-icon">🔢</span>
+            <span class="slot-label">Number Guess</span>
+          </a>
+          <a href="/gambling.html" class="inventory-slot rare" data-tooltip="Try Your Luck!">
+            <span class="slot-icon">🎰</span>
+            <span class="slot-label">Gambling</span>
+          </a>
+          <a href="/leaderboard.html" class="inventory-slot legendary" data-tooltip="Hall of Fame">
+            <span class="slot-icon">🏆</span>
+            <span class="slot-label">Leaderboard</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Math -->
+      <div class="inventory-panel">
+        <div class="panel-title">🧮 Math</div>
+        <div class="inventory-grid">
+          <a href="/mandelbrot.html" class="inventory-slot epic" data-tooltip="Fractal Explorer">
+            <span class="slot-icon">🌀</span>
+            <span class="slot-label">Mandelbrot</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+    </div>
+
+    <!-- Hotbar -->
+    <div class="hotbar">
+      <a href="/" class="hotbar-slot" title="Home">🏠</a>
+      <a href="/adventure1.html" class="hotbar-slot" title="Adventure">⚔️</a>
+      <a href="/gambling.html" class="hotbar-slot" title="Gambling">🎰</a>
+      <a href="/mandelbrot.html" class="hotbar-slot" title="Mandelbrot">🌀</a>
+      <a href="/leaderboard.html" class="hotbar-slot" title="Leaderboard">🏆</a>
+    </div>
+  </body>
+</html>

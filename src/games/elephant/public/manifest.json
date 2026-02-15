@@ -1,0 +1,9 @@
+{
+  "name": "Trunk Shot 3D",
+  "short_name": "Trunk Shot",
+  "start_url": ".",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#1a202c",
+  "theme_color": "#1a202c"
+}

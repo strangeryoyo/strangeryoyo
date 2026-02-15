@@ -1,0 +1,5 @@
+{
+  "name": "Gemini Aether-Maze",
+  "description": "A randomly generated 3D first-person maze experience with an AI-driven guide. Navigate through procedurally generated corridors, find the exit, and receive cryptic guidance from the Gemini AI.",
+  "requestFramePermissions": []
+}

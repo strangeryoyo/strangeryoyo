@@ -1,0 +1,9 @@
+{
+  "name": "Gorilla Grove: Canopy Jumper",
+  "short_name": "Gorilla Grove",
+  "start_url": ".",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#1a202c",
+  "theme_color": "#1a202c"
+}

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Endangered Species Games</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background: linear-gradient(135deg, #1a472a 0%, #2d5a3f 100%);
+        min-height: 100vh;
+        color: white;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+      .games-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+      }
+      .game-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 15px;
+        text-align: center;
+        transition: transform 0.2s, background 0.2s;
+      }
+      .game-card:hover {
+        transform: translateY(-5px);
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .game-card img {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 10px;
+      }
+      .game-card a {
+        color: #90EE90;
+        text-decoration: none;
+        font-size: 1em;
+        font-weight: bold;
+        display: block;
+      }
+      .game-card a:hover {
+        text-decoration: underline;
+      }
+      .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 30px;
+        color: #90EE90;
+      }
+      @media (max-width: 900px) {
+        .games-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      @media (max-width: 500px) {
+        .games-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Endangered Species Games</h1>
+    <div class="games-grid">
+      <div class="game-card">
+        <a href="/games/arctic-seal/">
+          <img src="/games/screenshots/arctic-seal.png" alt="Arctic Seal">
+          Arctic Seal
+        </a>
+      </div>
+      <div class="game-card">
+        <a href="/games/pangolin/">
+          <img src="/games/screenshots/sunda-pangolin.png" alt="Sunda Pangolin">
+          Sunda Pangolin
+        </a>
+      </div>
+      <div class="game-card">
+        <a href="/games/elephant/">
+          <img src="/games/screenshots/elephant.png" alt="Elephant">
+          Elephant
+        </a>
+      </div>
+      <div class="game-card">
+        <a href="/games/gorilla/">
+          <img src="/games/screenshots/mountain-gorilla.png" alt="Mountain Gorilla">
+          Mountain Gorilla
+        </a>
+      </div>
+      <div class="game-card">
+        <a href="/games/vaquita/">
+          <img src="/games/screenshots/vaquita.png" alt="Vaquita">
+          Vaquita
+        </a>
+      </div>
+      <div class="game-card">
+        <a href="/games/panda/">
+          <img src="/games/screenshots/red-panda.png" alt="Red Panda">
+          Red Panda
+        </a>
+      </div>
+      <div class="game-card">
+        <a href="/games/tamarin/">
+          <img src="/games/screenshots/golden-lion-tamarin.png" alt="Golden Lion Tamarin">
+          Golden Lion Tamarin
+        </a>
+      </div>
+      <div class="game-card">
+        <a href="/games/shark/">
+          <img src="/games/screenshots/shark.png" alt="Shark">
+          Shark
+        </a>
+      </div>
+      <div class="game-card">
+        <a href="/games/snow-leopard/">
+          <img src="/games/screenshots/snow-leopard.png" alt="Snow Leopard">
+          Snow Leopard
+        </a>
+      </div>
+      <div class="game-card">
+        <a href="/games/rhino/">
+          <img src="/games/screenshots/black-rhino.png" alt="Black Rhino">
+          Black Rhino
+        </a>
+      </div>
+      <div class="game-card">
+        <a href="/games/whale/">
+          <img src="/games/screenshots/right-whale.png" alt="Right Whale">
+          Right Whale
+        </a>
+      </div>
+      <div class="game-card">
+        <a href="/games/manta/">
+          <img src="/games/screenshots/sting-ray.png" alt="Sting Ray">
+          Sting Ray
+        </a>
+      </div>
+      <div class="game-card">
+        <a href="/games/monk-seal/">
+          <img src="/games/screenshots/monk-seal.png" alt="Monk Seal">
+          Monk Seal
+        </a>
+      </div>
+      <div class="game-card">
+        <a href="/games/turtle/">
+          <img src="/games/screenshots/sea-turtle.png" alt="Sea Turtle">
+          Sea Turtle
+        </a>
+      </div>
+      <div class="game-card">
+        <a href="/games/seastar/">
+          <img src="/games/screenshots/sunflower-sea-star.png" alt="Sunflower Sea Star">
+          Sunflower Sea Star
+        </a>
+      </div>
+      <div class="game-card">
+        <a href="/games/white-tiger/">
+          <img src="/games/screenshots/white-tiger.png" alt="White Tiger">
+          White Tiger
+        </a>
+      </div>
+    </div>
+    <a class="back-link" href="/home.html">Back to Home</a>
+  </body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "strangeryoyo",
+  "version": "1.0.0",
+  "description": "Francesco's website - games and fun stuff",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:game": "cd src/games/$GAME && npm run dev",
+    "build": "./scripts/build-all.sh",
+    "preview": "vite preview",
+    "deploy": "npm run build && firebase deploy --force"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "vite": "^7.3.1"
+  },
+  "dependencies": {
+    "openai": "^4.0.0"
+  }
+}
