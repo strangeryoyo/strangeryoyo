@@ -212,18 +212,82 @@ export class TileRenderer {
   }
 
   private drawCoral(ctx: CanvasRenderingContext2D, x: number, y: number, col: number, row: number) {
-    const hue = ((col * 37 + row * 53) % 3);
+    const variant = ((col * 37 + row * 53) % 3);
     const colors = ['#e06080', '#e08060', '#d060a0'];
-    ctx.fillStyle = colors[hue];
-    ctx.beginPath();
-    ctx.arc(x + 16, y + 20, 8, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(x + 10, y + 14, 5, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.arc(x + 22, y + 14, 5, 0, Math.PI * 2);
-    ctx.fill();
+    const darkColors = ['#b04060', '#b06040', '#a04080'];
+    const sway = Math.sin(this.waterFrame * 0.02 + col * 0.8 + row * 0.6) * 1.5;
+
+    // Base/trunk growing from bottom
+    ctx.fillStyle = darkColors[variant];
+    ctx.fillRect(x + 13, y + 18, 6, 14);
+
+    // Branching arms
+    ctx.fillStyle = colors[variant];
+    if (variant === 0) {
+      // Fan coral: wide branching shape
+      ctx.beginPath();
+      ctx.moveTo(x + 14, y + 20);
+      ctx.lineTo(x + 4 + sway, y + 6);
+      ctx.lineTo(x + 10 + sway, y + 4);
+      ctx.lineTo(x + 16, y + 14);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.moveTo(x + 18, y + 20);
+      ctx.lineTo(x + 22 + sway, y + 8);
+      ctx.lineTo(x + 28 + sway, y + 6);
+      ctx.lineTo(x + 28 + sway, y + 12);
+      ctx.lineTo(x + 20, y + 18);
+      ctx.fill();
+      // Polyp dots
+      ctx.fillStyle = '#f0a0b0';
+      ctx.fillRect(x + 6 + sway, y + 6, 2, 2);
+      ctx.fillRect(x + 24 + sway, y + 8, 2, 2);
+      ctx.fillRect(x + 26 + sway, y + 12, 2, 2);
+    } else if (variant === 1) {
+      // Staghorn coral: forking branches
+      ctx.fillRect(x + 14, y + 12, 4, 8);
+      // Left branch
+      ctx.beginPath();
+      ctx.moveTo(x + 14, y + 14);
+      ctx.lineTo(x + 6 + sway, y + 4);
+      ctx.lineTo(x + 10 + sway, y + 4);
+      ctx.lineTo(x + 16, y + 12);
+      ctx.fill();
+      // Right branch
+      ctx.beginPath();
+      ctx.moveTo(x + 18, y + 14);
+      ctx.lineTo(x + 24 + sway, y + 6);
+      ctx.lineTo(x + 28 + sway, y + 6);
+      ctx.lineTo(x + 20, y + 12);
+      ctx.fill();
+      // Tips
+      ctx.fillStyle = '#f0b080';
+      ctx.fillRect(x + 6 + sway, y + 3, 3, 2);
+      ctx.fillRect(x + 24 + sway, y + 5, 3, 2);
+      ctx.fillRect(x + 15, y + 10, 2, 2);
+    } else {
+      // Brain/mound coral: bumpy rounded shape
+      ctx.beginPath();
+      ctx.arc(x + 16, y + 16, 9, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x + 10, y + 12, 5, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(x + 22, y + 13, 4, 0, Math.PI * 2);
+      ctx.fill();
+      // Grooves
+      ctx.strokeStyle = darkColors[variant];
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(x + 10, y + 12);
+      ctx.quadraticCurveTo(x + 16 + sway, y + 14, x + 22, y + 16);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x + 12, y + 18);
+      ctx.quadraticCurveTo(x + 16 + sway, y + 20, x + 20, y + 18);
+      ctx.stroke();
+    }
   }
 
   private drawSign(ctx: CanvasRenderingContext2D, x: number, y: number) {
