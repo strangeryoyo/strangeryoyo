@@ -1,14 +1,17 @@
 import React from 'react';
 import { ScoreBreakdown } from '../types';
 
+type SubmitStatus = 'idle' | 'submitting' | 'qualified' | 'not_qualified' | 'error';
+
 interface Props {
   onMenu: () => void;
   score: number;
   scoreBreakdown: ScoreBreakdown | null;
   onSubmitScore?: () => void;
+  submitStatus?: SubmitStatus;
 }
 
-export function VictoryScreen({ onMenu, score, scoreBreakdown, onSubmitScore }: Props) {
+export function VictoryScreen({ onMenu, score, scoreBreakdown, onSubmitScore, submitStatus = 'idle' }: Props) {
   return (
     <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-b from-[#0a1628] via-[#1a3a5c] to-[#2d6b4e] z-50 overflow-auto">
       <h2
@@ -86,13 +89,46 @@ export function VictoryScreen({ onMenu, score, scoreBreakdown, onSubmitScore }: 
       </div>
 
       <div className="flex flex-col gap-3 mb-8">
-        {onSubmitScore && (
+        {onSubmitScore && submitStatus === 'idle' && (
           <button
             onClick={onSubmitScore}
             className="px-8 py-3 text-[#f0d860] text-xs border-2 border-[#f0d860] bg-[#1a3a5c] hover:bg-[#2a5a8c] transition-colors"
             style={{ fontFamily: "'Press Start 2P', monospace" }}
           >
             SUBMIT SCORE
+          </button>
+        )}
+        {submitStatus === 'submitting' && (
+          <div
+            className="px-8 py-3 text-[#a0d8e8] text-xs border-2 border-[#4080a0] bg-[#0a1628]"
+            style={{ fontFamily: "'Press Start 2P', monospace" }}
+          >
+            SUBMITTING...
+          </div>
+        )}
+        {submitStatus === 'qualified' && (
+          <div
+            className="px-8 py-3 text-[#60e080] text-xs border-2 border-[#60e080] bg-[#0a1628]"
+            style={{ fontFamily: "'Press Start 2P', monospace" }}
+          >
+            SCORE SAVED!
+          </div>
+        )}
+        {submitStatus === 'not_qualified' && (
+          <div
+            className="px-8 py-3 text-[#e0a040] text-xs border-2 border-[#e0a040] bg-[#0a1628]"
+            style={{ fontFamily: "'Press Start 2P', monospace" }}
+          >
+            NOT A TOP 10 SCORE
+          </div>
+        )}
+        {submitStatus === 'error' && (
+          <button
+            onClick={onSubmitScore}
+            className="px-8 py-3 text-[#e04060] text-xs border-2 border-[#e04060] bg-[#0a1628] hover:bg-[#1a3a5c] transition-colors"
+            style={{ fontFamily: "'Press Start 2P', monospace" }}
+          >
+            ERROR - RETRY?
           </button>
         )}
         <button

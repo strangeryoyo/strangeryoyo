@@ -69,7 +69,7 @@ export default function App() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<GameEngine | null>(null);
-  const { topEntry, showNamePrompt, handleSubmitScore, handleNameSubmit, handleNameSkip } = useLeaderboard({ gameName: 'whale' });
+  const { topEntry, showNamePrompt, submitStatus, handleSubmitScore, handleNameSubmit, handleNameSkip } = useLeaderboard({ gameName: 'whale' });
 
   // Resize canvas to fit viewport
   useEffect(() => {
@@ -183,6 +183,7 @@ export default function App() {
           score={state.score}
           scoreBreakdown={state.scoreBreakdown}
           onSubmitScore={handleVictorySubmitScore}
+          submitStatus={submitStatus}
         />
       )}
 
