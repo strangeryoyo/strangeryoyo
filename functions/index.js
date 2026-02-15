@@ -162,7 +162,9 @@ async function handleLeaderboardGet(gameName, req, res) {
 
 async function handleLeaderboardAll(req, res) {
   try {
-    const champions = {};
+    const topCount = Math.min(Number(req.query.top) || 1, 10);
+    const since = req.query.since ? Number(req.query.since) : null;
+    const leaderboards = {};
 
     await Promise.all(VALID_GAMES.map(async (game) => {
       const lowerIsBetter = LOWER_IS_BETTER.includes(game);
@@ -171,16 +173,29 @@ async function handleLeaderboardAll(req, res) {
       const snapshot = await db
         .collection('leaderboard').doc(game).collection('scores')
         .orderBy('score', sortDirection)
-        .limit(1)
         .get();
 
-      if (!snapshot.empty) {
-        const data = snapshot.docs[0].data();
-        champions[game] = { playerName: data.playerName, score: data.score, timestamp: data.timestamp };
+      let entries = snapshot.docs.map(doc => {
+        const data = doc.data();
+        return { playerName: data.playerName, score: data.score, timestamp: data.timestamp };
+      });
+
+      if (since && Number.isFinite(since)) {
+        entries = entries.filter(e => e.timestamp >= since);
       }
+
+      leaderboards[game] = entries.slice(0, topCount);
     }));
 
-    res.json({ success: true, champions });
+    // Backward compat: also include "champions" (top 1 per game)
+    const champions = {};
+    for (const [game, entries] of Object.entries(leaderboards)) {
+      if (entries.length > 0) {
+        champions[game] = entries[0];
+      }
+    }
+
+    res.json({ success: true, champions, leaderboards });
   } catch (error) {
     console.error("Error fetching all leaderboards:", error);
     res.status(500).json({ error: "Failed to fetch leaderboards", message: error.message });

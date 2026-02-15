@@ -75,12 +75,50 @@
         margin-bottom: 20px;
       }
 
+      .panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+
       .panel-title {
         font-size: 28px;
         color: #404040;
         text-shadow: 1px 1px 0px #FFFFFF;
-        margin-bottom: 12px;
         padding-left: 4px;
+      }
+
+      .toggle-group {
+        display: flex;
+        gap: 2px;
+      }
+
+      .toggle-btn {
+        font-family: 'VT323', monospace;
+        font-size: 16px;
+        padding: 4px 12px;
+        border: 2px solid #000;
+        border-top-color: #FFFFFF;
+        border-left-color: #FFFFFF;
+        border-bottom-color: #555555;
+        border-right-color: #555555;
+        background: #8B8B8B;
+        color: #404040;
+        cursor: pointer;
+      }
+
+      .toggle-btn:hover {
+        background: #A0A0A0;
+      }
+
+      .toggle-btn.active {
+        background: #FFAA00;
+        color: #000;
+        border-top-color: #FFDD55;
+        border-left-color: #FFDD55;
+        border-bottom-color: #AA6600;
+        border-right-color: #AA6600;
       }
 
       .champions-grid {
@@ -132,20 +170,34 @@
         text-transform: uppercase;
       }
 
-      .card-player {
-        font-size: 22px;
+      .card-player-row {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        font-size: 16px;
+        line-height: 1.4;
+      }
+
+      .card-medal {
+        flex-shrink: 0;
+        width: 20px;
+        text-align: center;
+      }
+
+      .card-player-name {
         color: #FFFF55;
         text-shadow: 1px 1px 0px #000;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        flex: 1;
       }
 
-      .card-score {
-        font-size: 16px;
+      .card-player-score {
         color: #FFFFFF;
         text-shadow: 1px 1px 0px #000;
         opacity: 0.8;
+        flex-shrink: 0;
       }
 
       .card-empty {
@@ -226,9 +278,15 @@
       </div>
 
       <div class="inventory-panel">
-        <div class="panel-title">👑 Champions</div>
+        <div class="panel-header">
+          <div class="panel-title">👑 Champions</div>
+          <div class="toggle-group">
+            <button id="btn-week" class="toggle-btn active">THIS WEEK</button>
+            <button id="btn-all" class="toggle-btn">ALL TIME</button>
+          </div>
+        </div>
         <div id="champions-container">
-          <div class="loading">Loading champions...</div>
+          <div class="loading">Loading...</div>
         </div>
       </div>
 
