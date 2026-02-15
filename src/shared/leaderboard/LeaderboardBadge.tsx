@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { LeaderboardEntry, fetchLeaderboard } from './api';
+import { LeaderboardEntry, fetchLeaderboard, getPlayerName, setPlayerName } from './api';
+import { NamePromptModal } from './NamePromptModal';
 
 interface LeaderboardBadgeProps {
   gameName: string;
@@ -23,6 +24,8 @@ export const LeaderboardBadge: React.FC<LeaderboardBadgeProps> = ({ gameName, fo
   const [mode, setMode] = useState<'week' | 'all'>('week');
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showNameEdit, setShowNameEdit] = useState(false);
+  const currentName = getPlayerName();
 
   useEffect(() => {
     setLoading(true);
@@ -76,6 +79,20 @@ export const LeaderboardBadge: React.FC<LeaderboardBadgeProps> = ({ gameName, fo
             </div>
           ))}
         </div>
+      )}
+      {currentName && (
+        <button
+          onClick={() => setShowNameEdit(true)}
+          className="text-yellow-500/40 hover:text-yellow-400 text-[7px] mt-1.5 w-full text-center transition-colors"
+        >
+          Playing as {currentName}
+        </button>
+      )}
+      {showNameEdit && (
+        <NamePromptModal
+          onSubmit={(name) => { setPlayerName(name); setShowNameEdit(false); }}
+          onSkip={() => setShowNameEdit(false)}
+        />
       )}
     </div>
   );
