@@ -191,10 +191,13 @@ const GameCanvas: React.FC<GameCanvasProps> = ({ onGameOver, gameStatus, setGame
       newX = lastPlatform.pos.x + lastPlatform.size.width + gap;
     }
 
-    // Height variation (proportional to canvas height)
-    const minY = canvasHeight * 0.75;
-    const maxY = canvasHeight * 0.33;
-    const newY = Math.random() * (minY - maxY) + maxY;
+    // Height variation relative to previous platform (reachable by jumping)
+    const prevY = lastPlatform ? lastPlatform.pos.y : canvasHeight * 0.75;
+    const maxClimb = 100 + (diffFactor * 60); // Max upward: 100px easy, 160px hard
+    const maxDrop = 120 + (diffFactor * 40);  // Max downward
+    const rawY = prevY + (Math.random() * (maxClimb + maxDrop) - maxClimb);
+    // Clamp within playable area
+    const newY = Math.max(canvasHeight * 0.25, Math.min(canvasHeight * 0.8, rawY));
 
     // Platform width shrinks with difficulty (starts big, gets smaller)
     const minWidth = MIN_PLATFORM_WIDTH_START - (diffFactor * (MIN_PLATFORM_WIDTH_START - MIN_PLATFORM_WIDTH_END));
