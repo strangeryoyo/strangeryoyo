@@ -54,7 +54,7 @@ const App: React.FC = () => {
       <HUD gameState={gameState} />
 
       {/* Leaderboard Badge */}
-      <LeaderboardBadge topEntry={topEntry} formatScore={(s) => (s / 1000).toFixed(2) + 's'} className="absolute top-4 left-1/2 -translate-x-1/2 z-20" />
+      <LeaderboardBadge gameName="rhino" formatScore={(s) => (s / 1000).toFixed(2) + 's'} className="absolute top-4 left-1/2 -translate-x-1/2 z-20" />
 
       {/* Cinematic Vignette */}
       <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_150px_rgba(0,0,0,0.8)]" />

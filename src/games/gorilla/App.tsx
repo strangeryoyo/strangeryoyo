@@ -38,7 +38,7 @@ function App() {
         onStart={handleStart}
         onRestart={handleStart}
       />
-      <div className="absolute top-4 right-4 z-20"><LeaderboardBadge topEntry={topEntry} /></div>
+      <div className="absolute top-4 right-4 z-20"><LeaderboardBadge gameName="gorilla" /></div>
       {showNamePrompt && <NamePromptModal onSubmit={handleNameSubmit} onSkip={handleNameSkip} />}
     </div>
   );

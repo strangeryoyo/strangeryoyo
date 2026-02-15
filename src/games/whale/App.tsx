@@ -144,7 +144,7 @@ export default function App() {
         <>
           <MainMenu onStart={startGame} />
           <div className="absolute top-4 right-4 z-[60]">
-            <LeaderboardBadge topEntry={topEntry} />
+            <LeaderboardBadge gameName="whale" />
           </div>
         </>
       )}

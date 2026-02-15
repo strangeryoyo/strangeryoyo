@@ -174,7 +174,7 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        <LeaderboardBadge topEntry={topEntry} />
+        <LeaderboardBadge gameName="manta" />
 
         <div className="flex flex-col items-end">
           <div className="flex items-center gap-2 text-yellow-500">

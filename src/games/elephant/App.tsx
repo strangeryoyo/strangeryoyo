@@ -203,7 +203,7 @@ export default function App() {
           {/* Left: Score + Upgrade stacked on mobile */}
           <div className="flex flex-col gap-1 lg:flex-row lg:items-start lg:gap-4">
             {/* Leaderboard Badge */}
-            <LeaderboardBadge topEntry={topEntry} />
+            <LeaderboardBadge gameName="elephant" />
 
             {/* Score */}
             <div className="bg-white/80 backdrop-blur-md p-1.5 lg:p-4 rounded-lg lg:rounded-xl border-2 lg:border-4 border-blue-400 shadow-xl flex items-center gap-2 lg:gap-4">

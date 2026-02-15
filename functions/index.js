@@ -86,36 +86,33 @@ async function handleLeaderboardSubmit(req, res) {
     const lowerIsBetter = LOWER_IS_BETTER.includes(game);
     const sortDirection = lowerIsBetter ? 'asc' : 'desc';
 
-    // Get current top 10
-    const snapshot = await scoresRef.orderBy('score', sortDirection).limit(MAX_LEADERBOARD_SIZE).get();
-    const currentScores = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-    // Check if this score qualifies
-    let qualifies = currentScores.length < MAX_LEADERBOARD_SIZE;
-    if (!qualifies && currentScores.length > 0) {
-      const worstScore = currentScores[currentScores.length - 1].score;
-      qualifies = lowerIsBetter ? score < worstScore : score > worstScore;
-    }
-
-    if (!qualifies) {
-      res.json({ success: true, qualified: false, message: "Score did not qualify for top 10" });
-      return;
-    }
-
-    // Add the new score
+    // Always save the score
     await scoresRef.add({
       playerName: playerName.trim(),
       score,
       timestamp: Date.now()
     });
 
-    // Evict worst score if over limit
-    if (currentScores.length >= MAX_LEADERBOARD_SIZE) {
-      const worstDoc = currentScores[currentScores.length - 1];
-      await scoresRef.doc(worstDoc.id).delete();
-    }
+    // Check if it qualifies for all-time top 10
+    const snapshot = await scoresRef.orderBy('score', sortDirection).limit(MAX_LEADERBOARD_SIZE).get();
+    const topScores = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    const topIds = new Set(topScores.map(s => s.id));
 
-    res.json({ success: true, qualified: true });
+    let qualified = topScores.some(s => s.playerName === playerName.trim() && s.score === score);
+
+    // Clean up: delete scores older than 30 days that aren't in the all-time top 10
+    const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+    const allDocs = await scoresRef.get();
+    const deletePromises = [];
+    for (const doc of allDocs.docs) {
+      const data = doc.data();
+      if (!topIds.has(doc.id) && data.timestamp < thirtyDaysAgo) {
+        deletePromises.push(doc.ref.delete());
+      }
+    }
+    await Promise.all(deletePromises);
+
+    res.json({ success: true, qualified });
   } catch (error) {
     console.error("Error submitting score:", error);
     res.status(500).json({ error: "Failed to submit score", message: error.message });
@@ -135,13 +132,20 @@ async function handleLeaderboardGet(gameName, req, res) {
     const snapshot = await db
       .collection('leaderboard').doc(gameName).collection('scores')
       .orderBy('score', sortDirection)
-      .limit(MAX_LEADERBOARD_SIZE)
       .get();
 
-    const leaderboard = snapshot.docs.map(doc => {
+    let leaderboard = snapshot.docs.map(doc => {
       const data = doc.data();
       return { playerName: data.playerName, score: data.score, timestamp: data.timestamp };
     });
+
+    // Optional time filter
+    const since = req.query.since ? Number(req.query.since) : null;
+    if (since && Number.isFinite(since)) {
+      leaderboard = leaderboard.filter(entry => entry.timestamp >= since);
+    }
+
+    leaderboard = leaderboard.slice(0, MAX_LEADERBOARD_SIZE);
 
     res.json({ success: true, leaderboard });
   } catch (error) {

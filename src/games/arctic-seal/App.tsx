@@ -51,7 +51,7 @@ function App() {
       />
 
       <div className="absolute top-4 right-4 z-20">
-        <LeaderboardBadge topEntry={topEntry} />
+        <LeaderboardBadge gameName="arctic-seal" />
       </div>
 
       {gameState === 'MENU' && (

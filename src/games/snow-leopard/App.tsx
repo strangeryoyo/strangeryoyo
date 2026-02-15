@@ -412,7 +412,7 @@ const App: React.FC = () => {
                   {gameState.moves}
                 </span>
               </div>
-              <LeaderboardBadge topEntry={topEntry} />
+              <LeaderboardBadge gameName="snow-leopard" />
             </div>
           </div>
 

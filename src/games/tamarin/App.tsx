@@ -64,7 +64,7 @@ const App: React.FC = () => {
           <i className={`fas ${isSoundOn ? 'fa-volume-up' : 'fa-volume-mute'}`}></i>
         </button>
 
-        <div className="absolute top-4 left-4 z-[60]"><LeaderboardBadge topEntry={topEntry} /></div>
+        <div className="absolute top-4 left-4 z-[60]"><LeaderboardBadge gameName="tamarin" /></div>
 
         {gameState === GameState.PLAYING ? (
           <GameCanvas onGameOver={handleGameOver} />

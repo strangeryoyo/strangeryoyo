@@ -418,7 +418,7 @@ const App: React.FC = () => {
 
       <GameHUD score={score} highScore={highScore} />
       <div className="absolute top-4 right-4 z-40">
-        <LeaderboardBadge topEntry={topEntry} />
+        <LeaderboardBadge gameName="pangolin" />
       </div>
 
       {gameState === GameState.MENU && (

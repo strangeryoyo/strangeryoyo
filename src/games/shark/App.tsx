@@ -98,7 +98,7 @@ const App: React.FC = () => {
         <>
           <HUD gameState={gameState} aiMessage={aiMessage} />
           <div className="absolute top-4 right-4 z-20">
-            <LeaderboardBadge topEntry={topEntry} />
+            <LeaderboardBadge gameName="shark" />
           </div>
         </>
       )}

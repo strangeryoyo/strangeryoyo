@@ -22,9 +22,12 @@ export interface ChampionsResponse {
 
 const API_BASE = '/api/leaderboard';
 
-export async function fetchLeaderboard(gameName: string): Promise<LeaderboardEntry[]> {
+export async function fetchLeaderboard(gameName: string, since?: number): Promise<LeaderboardEntry[]> {
   try {
-    const res = await fetch(`${API_BASE}/${gameName}`);
+    const url = since
+      ? `${API_BASE}/${gameName}?since=${since}`
+      : `${API_BASE}/${gameName}`;
+    const res = await fetch(url);
     const data: LeaderboardResponse = await res.json();
     return data.success ? data.leaderboard : [];
   } catch {

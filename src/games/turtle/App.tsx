@@ -341,7 +341,7 @@ const App: React.FC = () => {
           <span className="text-2xl font-game text-white">{gameState.score}</span>
         </div>
 
-        <LeaderboardBadge topEntry={topEntry} />
+        <LeaderboardBadge gameName="turtle" />
 
         <button
           onClick={() => setIsSoundEnabled(!isSoundEnabled)}

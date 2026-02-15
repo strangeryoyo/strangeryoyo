@@ -179,7 +179,7 @@ const App: React.FC = () => {
             <div className="text-2xl font-game font-bold">{gameState.score}</div>
           </div>
           <div className="text-blue-400 text-xs mt-1 font-bold">Best: {gameState.highScore}</div>
-          <LeaderboardBadge topEntry={topEntry} />
+          <LeaderboardBadge gameName="seastar" />
         </div>
       </div>
 
